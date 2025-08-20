@@ -1,0 +1,44 @@
+{{ define "index" }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.6"></script>
+  </head>
+  <body>
+    <h1>Assets</h1>
+
+    <div id="asset-list">
+      {{ template "asset-list" . }}
+    </div>
+
+    <form hx-post="/uploadAsset" hx-target="#asset-list" hx-swap="innerHTML">
+      <label for="id">ID:</label> <input type="text" name="id"><br>
+      <label for="owner">Owner:</label> <input type="text" name="owner"><br>
+      <label for="date-of-creation">Date of Creation:</label> <input type="text" name="date-of-creation"><br>
+      <input type="submit" value="Add Asset">
+    </form>
+
+  </body>
+</html>
+{{ end }}
+
+{{ define "asset-list" }}
+  {{ range $key, $asset := . }}
+<p hx-get="/updateAsset?id={{ $key }}" hx-swap="outerHTML" hx-target="this" id="{{ $key }}"> {{ $asset.ID }} - {{ $asset.Owner }} - {{ $asset.DateOfCreation }}</p>
+  {{ end }}
+{{ end }}
+
+{{ define "edit-asset" }}
+<form hx-post="/uploadAsset" hx-target="#asset-list" hx-swap="innerHTML">
+  <label for="id">ID:</label> <input type="text" name="id" value="{{ .ID }}">
+  <label for="owner">Owner:</label> <input type="text" name="owner" value="{{ .Owner }}">
+  <label for="date-of-creation">Date of Creation:</label> <input type="text" name="date-of-creation" value="{{ .DateOfCreation }}">
+  <input type="submit" value="Update Asset">
+
+</form>
+{{ end }}
+
