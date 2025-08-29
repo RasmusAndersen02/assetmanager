@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 )
 
 type Asset struct {
@@ -45,7 +46,7 @@ func NewAssetHandler(w http.ResponseWriter, r *http.Request) {
 		DateOfCreation: r.FormValue("date-of-creation"),
 	}
 	assetCollection.AddAsset(newAsset)
-
+	fmt.Println(newAsset)
 	tmpl.ExecuteTemplate(w, "asset-list", assetCollection)
 }
 
@@ -60,4 +61,33 @@ func EditAssetHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(asset)
 	}
 	tmpl.ExecuteTemplate(w, "edit-asset", asset)
+}
+func FilterHandler (w http.ResponseWriter, r *http.Request) {
+	
+}
+func SortHandler (w http.ResponseWriter, r *http.Request) {
+	
+}
+
+func FilterCollection (assetCollection AssetCollection, field string, filter string) []string {
+	getField := func (a Asset) string{
+		switch field {
+		case "ID":
+			return a.ID
+		case "Owner":
+			return a.Owner
+		case "DateOfCreation":
+			return a.DateOfCreation
+		default:
+			return ""
+		}
+	}
+	for _, asset := range assetCollection {
+		value := strings.ToLower(getField(asset))
+		if strings.HasPrefix(value, strings.ToLower(filter))
+
+		}
+	}	
+}
+func SortCollection (w http.ResponseWriter, r *http.Request) {
 }
